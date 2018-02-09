@@ -35,7 +35,4 @@ class question_merger {
         $count = count($questions);
         echo "Merging {$count} {$qtype} questions down to 1\n";
     }
-
-
-
 }

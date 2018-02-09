@@ -43,13 +43,13 @@ class context_question_reducer {
         self::merge_duplicate_questions_within_question_categories($qcats);
     }
 
-    protected static function merge_duplicate_questions_within_question_categories($qcats) {
+    private static function merge_duplicate_questions_within_question_categories($qcats) {
         foreach ($qcats as $qcat) {
             qcat_dupe_question_merger::merge_duplicates($qcat);
         }
     }
 
-    protected static function get_all_question_categories($contextid) {
+    private static function get_all_question_categories($contextid) {
         global $DB;
         $qcats = $DB->get_records('question_categories', array('contextid' => $contextid));
         return $qcats;

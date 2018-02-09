@@ -58,7 +58,4 @@ class question_dupe_checker {
 
         return true;
     }
-
-
-
 }

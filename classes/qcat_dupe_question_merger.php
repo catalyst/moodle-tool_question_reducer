@@ -43,7 +43,7 @@ class qcat_dupe_question_merger {
         }
     }
 
-    public static function merge_qtype_duplicates($qcat, $qtype) {
+    private static function merge_qtype_duplicates($qcat, $qtype) {
         // Get all questions with same name
         $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
 
