@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * dupe_merger interface.
+ * question_merger class.
+ *
+ * Will merge duplicate questions
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -23,10 +25,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_mergers;
+namespace tool_question_reducer;
 
 defined('MOODLE_INTERNAL') || die();
 
-interface dupe_merger {
-    public static function merge_questions($questions);
+class question_merger {
+
+    public static function merge_questions($questions, $qtype) {
+        $count = count($questions);
+        echo "Merging {$count} {$qtype} questions down to 1\n";
+    }
+
+
+
 }

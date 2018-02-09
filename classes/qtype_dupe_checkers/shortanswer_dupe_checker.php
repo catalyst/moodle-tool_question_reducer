@@ -29,7 +29,7 @@ namespace tool_question_reducer\qtype_dupe_checkers;
 
 defined('MOODLE_INTERNAL') || die();
 
-class shortanswer_dupe_checker implements dupe_checker {
+class shortanswer_dupe_checker implements qtype_dupe_checker {
 
     public static function questions_are_duplicate($questiona, $questionb) {
         if ($questiona->options->usecase !== $questionb->options->usecase) {

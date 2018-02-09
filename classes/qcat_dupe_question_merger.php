@@ -54,7 +54,7 @@ class qcat_dupe_question_merger {
         }
 
         foreach ($identicalquestiongroups as $group) {
-            self::merge_questions($group, $qtype);
+            question_merger::merge_questions($group, $qtype);
         }
     }
 
@@ -104,7 +104,7 @@ class qcat_dupe_question_merger {
                 $groupquestion = reset($group);
 
                 // Only need to check against first.
-                if (self::questions_are_same($question, $groupquestion, $qtype)) {
+                if (question_dupe_checker::questions_are_duplicate($question, $groupquestion, $qtype)) {
                     $subgroups[$key][] = $question;
                     $questioningroup = true;
                     break;
@@ -123,38 +123,5 @@ class qcat_dupe_question_merger {
         }
 
         return $subgroups;
-    }
-
-    private static function questions_are_same($questiona, $questionb, $qtype) {
-        $basecomparisonattributes = array(
-            'questiontext',
-            'questiontextformat',
-            'generalfeedback',
-            'generalfeedbackformat',
-            'defaultmark',
-            'penalty',
-            'length',
-            'hidden'
-        );
-
-        foreach ($basecomparisonattributes as $attribute) {
-            if ($questiona->$attribute !== $questionb->$attribute) {
-                return false;
-            }
-        }
-
-        // TODO: Need to check 'hints'
-
-        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
-        if (!$questiontypedupechecker::questions_are_duplicate($questiona, $questionb)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static function merge_questions($questions, $qtype) {
-        $questionmerger = "\\tool_question_reducer\\qtype_dupe_mergers\\{$qtype}_dupe_merger";
-        $questionmerger::merge_questions($questions);
     }
 }
