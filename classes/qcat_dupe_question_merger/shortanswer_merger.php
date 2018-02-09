@@ -89,7 +89,54 @@ class shortanswer_merger {
     }
 
     private static function subgroup_based_on_question($questions) {
-        return $questions;
+        $subgroups = array();
+
+        foreach ($questions as $question) {
+            $questioningroup = false;
+            foreach ($subgroups as $key => $group) {
+                $groupquestion = reset($group);
+
+                // Only need to check against first.
+                if (self::questions_are_same($question, $groupquestion)) {
+                    $subgroups[$key][] = $question;
+                    $questioningroup = true;
+                    break;
+                }
+            }
+
+            if (!$questioningroup) {
+                $subgroups[] = array($question);
+            }
+        }
+
+        foreach ($subgroups as $key => $subgroup) {
+            if (count($subgroup) < 2) {
+                unset($subgroup[$key]);
+            }
+        }
+
+        return $subgroups;
+    }
+
+    private static function questions_are_same($qa, $qb) {
+        $comparisonattributes = array(
+            'questiontext',
+            'questiontextformat',
+            'generalfeedback',
+            'generalfeedbackformat',
+            'defaultmark',
+            'penalty',
+            'length',
+            'hidden'
+        );
+
+        foreach ($comparisonattributes as $attribute) {
+            if ($qa->$attribute !== $qb->$attribute) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static function subgroup_based_on_specific_qtype_details($questions) {
