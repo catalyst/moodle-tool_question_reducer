@@ -29,29 +29,35 @@ namespace tool_question_reducer\qcat_dupe_question_merger;
 
 defined('MOODLE_INTERNAL') || die();
 
-
-require_once($CFG->dirroot . '/admin/tool/objectfs/lib.php');
+require_once($CFG->libdir.'/questionlib.php');
 
 class shortanswer_merger {
 
     public static $qtype = 'shortanswer';
 
     public static function merge_duplicates($qcat) {
-        // Get all shortanswer questions with same name
+        // Get all questions with same name
         $samenamegroups = self::get_question_groups_with_same_name($qcat);
 
-        // Group now based on base question data.
-        $samequestiongroups = array();
+        // Group now based on all question data.
+        $identicalquestions = array();
         foreach ($samenamegroups as $group) {
-            $samequestiongroups[] = self::subgroup_based_on_question($group);
+            $identicalquestions = $identicalquestions + self::subgroup_based_on_question($group);
         }
 
-        $identicalquestions[] = array();
-        foreach ($samequestiongroups as $group) {
-            $identicalquestions[] = self::subgroup_based_on_specific_qtype_details($group);
+        self::print_counts($identicalquestions);
+    }
+
+    private static function print_counts($questiongroups) {
+        $totalcount = 0;
+
+        foreach ($questiongroups as $questiongroup) {
+            $totalcount += count($questiongroup);
         }
 
-        var_dump($identicalquestions);
+        $finalcount = count($questiongroups);
+
+        echo "Can reduce {$totalcount} questions to {$finalcount} questions\n";
     }
 
     private static function get_question_groups_with_same_name($qcat) {
@@ -75,6 +81,9 @@ class shortanswer_merger {
         );
 
         $questions = $DB->get_records_sql($sql, $params);
+
+        // Attach question type data
+        get_question_options($questions);
 
         // Group by name
         $groupedquestions = array();
@@ -111,15 +120,15 @@ class shortanswer_merger {
 
         foreach ($subgroups as $key => $subgroup) {
             if (count($subgroup) < 2) {
-                unset($subgroup[$key]);
+                unset($subgroups[$key]);
             }
         }
 
         return $subgroups;
     }
 
-    private static function questions_are_same($qa, $qb) {
-        $comparisonattributes = array(
+    private static function questions_are_same($questiona, $questionb) {
+        $basecomparisonattributes = array(
             'questiontext',
             'questiontextformat',
             'generalfeedback',
@@ -130,8 +139,33 @@ class shortanswer_merger {
             'hidden'
         );
 
-        foreach ($comparisonattributes as $attribute) {
-            if ($qa->$attribute !== $qb->$attribute) {
+        foreach ($basecomparisonattributes as $attribute) {
+            if ($questiona->$attribute !== $questionb->$attribute) {
+                return false;
+            }
+        }
+
+        // TODO: Need to check 'hints'
+
+        if (!self::questions_are_same_for_type($questiona, $questionb)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function questions_are_same_for_type($questiona, $questionb) {
+        if ($questiona->options->usecase !== $questionb->options->usecase) {
+            return false;
+        }
+
+        // Need to reorder array keys because they are id indexed.
+        $answersa = array_values($questiona->options->answers);
+        $answersb = array_values($questionb->options->answers);
+
+        // TODO: Do this better, for now we assume they have the same order.
+        foreach ($answersa as $key => $answer) {
+            if (!self::answers_are_same($answer, $answersb[$key])) {
                 return false;
             }
         }
@@ -139,7 +173,21 @@ class shortanswer_merger {
         return true;
     }
 
-    private static function subgroup_based_on_specific_qtype_details($questions) {
-        return $questions;
+    private static function answers_are_same($answera, $answerb) {
+        $comparisonattributes = array(
+            'answer',
+            'answerformat',
+            'fraction',
+            'feedback',
+            'feedbackformat'
+        );
+
+        foreach ($comparisonattributes as $attribute) {
+            if ($answera->$attribute !== $answerb->$attribute) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
