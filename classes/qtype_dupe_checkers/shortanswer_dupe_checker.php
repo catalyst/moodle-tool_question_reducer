@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * context_question_reducer class.
+ * shortanswer_dupe_checker class.
  *
- * Will reduce questions within supplied context.
+ * Will check if shortanswer questions are duplicate
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -29,9 +29,7 @@ namespace tool_question_reducer\qtype_dupe_checkers;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/questionlib.php');
-
-class shortanswer_dupe_checker {
+class shortanswer_dupe_checker implements dupe_checker {
 
     public static function questions_are_duplicate($questiona, $questionb) {
         if ($questiona->options->usecase !== $questionb->options->usecase) {
