@@ -48,15 +48,8 @@ class context_question_reducer {
     }
 
     protected static function merge_duplicate_questions_within_question_categories($qcats) {
-        $supportedquestiontypes = array(
-            'shortanswer'
-        );
-
         foreach ($qcats as $qcat) {
-            foreach ($supportedquestiontypes as $qtype) {
-                $mergerclass = "\\tool_question_reducer\\qcat_dupe_question_merger\\{$qtype}_merger";
-                $mergerclass::merge_duplicates($qcat);
-            }
+            qcat_dupe_question_merger::merge_duplicates($qcat);
         }
     }
 
