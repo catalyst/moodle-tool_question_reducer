@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * dupe_checker interface.
+ * shortanswer_dupe_checker class.
+ *
+ * Will check if shortanswer questions are duplicate
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -23,10 +25,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
+namespace tool_question_reducer\qtype_dupe_mergers;
 
 defined('MOODLE_INTERNAL') || die();
 
-interface dupe_checker {
-    public static function questions_are_duplicate($questiona, $questionb);
+class shortanswer_dupe_merger implements dupe_merger {
+    public static function merge_questions($questions) {
+        echo "Gonna merge " . count($questions) . " questions down to 1 question\n";
+    }
 }

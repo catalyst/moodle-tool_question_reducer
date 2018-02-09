@@ -31,10 +31,6 @@ defined('MOODLE_INTERNAL') || die();
 
 class context_question_reducer {
 
-    public static $supportedquestiontypes = array(
-        'shortanswer'
-    );
-
     public static function reduce_questions($contextid) {
 
         // Get all question categories in context

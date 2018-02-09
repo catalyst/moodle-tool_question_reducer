@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * dupe_checker interface.
+ * dupe_merger interface.
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -23,10 +23,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
+namespace tool_question_reducer\qtype_dupe_mergers;
 
 defined('MOODLE_INTERNAL') || die();
 
-interface dupe_checker {
-    public static function questions_are_duplicate($questiona, $questionb);
+interface dupe_merger {
+    public static function merge_questions($questions);
 }

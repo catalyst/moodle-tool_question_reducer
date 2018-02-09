@@ -48,12 +48,14 @@ class qcat_dupe_question_merger {
         $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
 
         // Group now based on all question data.
-        $identicalquestions = array();
+        $identicalquestiongroups = array();
         foreach ($samenamegroups as $group) {
-            $identicalquestions = $identicalquestions + self::subgroup_based_on_question($group, $qtype);
+            $identicalquestiongroups = $identicalquestiongroups + self::subgroup_based_on_question($group, $qtype);
         }
 
-        self::print_counts($identicalquestions);
+        foreach ($identicalquestiongroups as $group) {
+            self::merge_questions($group, $qtype);
+        }
     }
 
     private static function get_question_groups_with_same_name($qcat, $qtype) {
@@ -151,17 +153,8 @@ class qcat_dupe_question_merger {
         return true;
     }
 
-    private static function print_counts($questiongroups) {
-        $totalcount = 0;
-
-        foreach ($questiongroups as $questiongroup) {
-            $totalcount += count($questiongroup);
-        }
-
-        $finalcount = count($questiongroups);
-
-        echo "Can reduce {$totalcount} questions to {$finalcount} questions\n";
+    private static function merge_questions($questions, $qtype) {
+        $questionmerger = "\\tool_question_reducer\\qtype_dupe_mergers\\{$qtype}_dupe_merger";
+        $questionmerger::merge_questions($questions);
     }
-
-
 }
