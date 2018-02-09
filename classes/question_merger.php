@@ -34,5 +34,9 @@ class question_merger {
     public static function merge_questions($questions, $qtype) {
         $count = count($questions);
         echo "Merging {$count} {$qtype} questions down to 1\n";
+
+        // Select the first question as the parent
+        // Update references to the others to point to the parent instead
+        // Remove orphaned data, including orphaned qtype data.
     }
 }
