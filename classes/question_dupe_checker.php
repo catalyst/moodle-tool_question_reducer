@@ -40,7 +40,7 @@ class question_dupe_checker {
         foreach ($qtypefilenames as $filename) {
             $supportedqtype = basename(str_replace('_dupe_checker.php', '', $filename));
 
-            // Ignore the interface.
+            // Ignore the abstract class.
             if ($supportedqtype === 'qtype') {
                 continue;
             }

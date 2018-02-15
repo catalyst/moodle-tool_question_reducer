@@ -27,6 +27,23 @@ namespace tool_question_reducer\qtype_dupe_checkers;
 
 defined('MOODLE_INTERNAL') || die();
 
-interface qtype_dupe_checker {
-    public static function questions_are_duplicate($questiona, $questionb);
+abstract class qtype_dupe_checker {
+    public static function questions_are_duplicate($questiona, $questionb) {
+        if (!static::question_options_are_duplicate($questiona->options, $questionb->options)) {
+             return false;
+        }
+
+        return true;
+    }
+
+    private static function question_options_are_duplicate($optionsa, $optionsb) {
+        foreach (static::get_qtype_option_fields() as $field) {
+            if ($optionsa->$field !== $optionsb->$field) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    abstract protected static function get_qtype_option_fields();
 }
