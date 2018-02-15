@@ -33,6 +33,10 @@ abstract class qtype_dupe_checker {
              return false;
         }
 
+        if (!static::specific_qtype_details_are_duplicate($questiona, $questionb)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -45,5 +49,13 @@ abstract class qtype_dupe_checker {
         return true;
     }
 
-    abstract protected static function get_qtype_option_fields();
+    // Override me if required.
+    protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {
+        return true;
+    }
+
+    // Override me if required.
+    protected static function get_qtype_option_fields() {
+        return array();
+    }
 }
