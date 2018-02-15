@@ -65,7 +65,7 @@ class qcat_dupe_question_merger {
                     AND q.qtype = :qtype
                     AND q.name in ( SELECT q.name
                                     FROM {question} q
-                                    INNER JOIN mdl_question_categories qc on qc.id = q.category
+                                    INNER JOIN {question_categories} qc on qc.id = q.category
                                     WHERE q.category = :qcatidtwo
                                         AND q.qtype = :qtypetwo
                                     GROUP BY q.name

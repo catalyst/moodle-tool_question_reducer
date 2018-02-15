@@ -34,9 +34,6 @@ class question_merger {
     public static function merge_questions($questions, $qtype) {
         global $DB;
 
-        $count = count($questions);
-        echo "Merging {$count} {$qtype} questions down to 1\n";
-
         // Dupe questions will be merged into master.
         $master = reset($questions);
 
@@ -71,7 +68,7 @@ class question_merger {
         $DB->execute($sql, $params);
     }
 
-    private static function merge_question_attempts() {
+    private static function merge_question_attempts($master, $duplicate) {
         global $DB;
         $sql = "UPDATE {question_attempts}
                 SET questionid = :masterid
