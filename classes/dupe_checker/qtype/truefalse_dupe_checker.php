@@ -26,7 +26,7 @@
  */
 
 namespace tool_question_reducer\dupe_checker\qtype;
-use tool_question_reducer\question_answer_dupe_checker;
+use tool_question_reducer\dupe_checker\question_answer_dupe_checker;
 
 class truefalse_dupe_checker extends qtype_dupe_checker {
 
