@@ -98,18 +98,22 @@ class qcat_dupe_question_merger {
         foreach ($questions as $question) {
             $questioningroup = false;
             foreach ($subgroups as $key => $group) {
-                $groupquestion = reset($group);
+                // We cannot merge questions that share a quiz, such that two quiz slots have the same question id as
+                // this will lead to issues. There is definately a better way to do this, will not figure out optimal groupings.
+                if (self::question_shares_quiz_with_any_questions($question, $group)) {
+                    continue;
+                }
 
-                // Only need to check against first.
+                $groupquestion = reset($group); // Only need to check against first.
                 if (question_dupe_checker::questions_are_duplicate($question, $groupquestion, $qtype)) {
-                    $subgroups[$key][] = $question;
+                    $subgroups[$key][$question->id] = $question;
                     $questioningroup = true;
                     break;
                 }
             }
 
             if (!$questioningroup) {
-                $subgroups[] = array($question);
+                $subgroups[] = array($question->id => $question);
             }
         }
 
@@ -120,5 +124,25 @@ class qcat_dupe_question_merger {
         }
 
         return $subgroups;
+    }
+
+    private static function question_shares_quiz_with_any_questions($question, $questions) {
+        global $DB;
+
+        // INTERSECT not supported by mysql.
+        $sql = "SELECT distinct(qs.quizid)
+                FROM mdl_quiz_slots qs
+                WHERE slot in (:questionsids)
+                INTERSECT
+                SELECT distinct(qs.quizid)
+                FROM mdl_quiz_slots qs
+                WHERE slot = :questionid";
+
+        $params = array(
+            'questionsids' => implode(',', array_keys($questions)),
+            'questionid' => $question->id,
+        );
+
+        return $DB->record_exists_sql($sql, $params);
     }
 }
