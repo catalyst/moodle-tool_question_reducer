@@ -32,11 +32,62 @@ defined('MOODLE_INTERNAL') || die();
 class question_merger {
 
     public static function merge_questions($questions, $qtype) {
+        global $DB;
+
         $count = count($questions);
         echo "Merging {$count} {$qtype} questions down to 1\n";
 
-        // Select the first question as the parent
-        // Update references to the others to point to the parent instead
-        // Remove orphaned data, including orphaned qtype data.
+        // Dupe questions will be merged into master.
+        $master = reset($questions);
+
+        $duplicates = array_slice($questions, 1);
+
+        try {
+            $transaction = $DB->start_delegated_transaction();
+            foreach ($duplicates as $duplicate) {
+                self::merge_question($master, $duplicate);
+            }
+            $transaction->allow_commit();
+        } catch (\Exception $e) {
+            $transaction->rollback($e);
+        }
+    }
+
+    private static function merge_question($master, $duplicate) {
+        self::merge_quiz_slots($master, $duplicate);
+        self::merge_question_attempts($master, $duplicate);
+        self::delete_question($duplicate);
+    }
+
+    private static function merge_quiz_slots($master, $duplicate) {
+        global $DB;
+        $sql = "UPDATE {quiz_slots}
+                SET questionid = :masterid
+                WHERE questionid = :duplicateid";
+        $params = array(
+            'masterid' => $master->id,
+            'duplicateid' => $duplicate->id,
+        );
+        $DB->execute($sql, $params);
+    }
+
+    private static function merge_question_attempts() {
+        global $DB;
+        $sql = "UPDATE {question_attempts}
+                SET questionid = :masterid
+                WHERE questionid = :duplicateid";
+        $params = array(
+            'masterid' => $master->id,
+            'duplicateid' => $duplicate->id,
+        );
+        $DB->execute($sql, $params);
+    }
+
+    private static function delete_question($duplicate) {
+        if (questions_in_use(array($duplicate->id))) {
+            throw new \Exception("question {$duplicate->id} is in use. Cannot delete.");
+        }
+
+        question_delete_question($duplicate->id);
     }
 }
