@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * dupe_checker interface.
+ * numerical_dupe_checker class.
+ *
+ * Will check if numerical questions are duplicate
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -24,34 +26,29 @@
  */
 
 namespace tool_question_reducer\qtype_dupe_checkers;
-use tool_question_reducer\helpers\comparer;
 
 defined('MOODLE_INTERNAL') || die();
 
-abstract class qtype_dupe_checker {
-    public static function questions_are_duplicate($questiona, $questionb) {
-        if (!static::question_options_are_duplicate($questiona->options, $questionb->options)) {
-             return false;
-        }
+use tool_question_reducer\helpers\comparer;
 
-        if (!static::specific_qtype_details_are_duplicate($questiona, $questionb)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static function question_options_are_duplicate($optionsa, $optionsb) {
-        return comparer::objects_are_duplicate($optionsa, $optionsb, static::get_qtype_option_fields());
-    }
-
-    // Override me if required.
-    protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {
-        return true;
-    }
-
-    // Override me if required.
+class numerical_dupe_checker extends qtype_dupe_checker {
     protected static function get_qtype_option_fields() {
-        return array();
+        return array(
+            'showunits',
+            'unitsleft',
+            'unitgradingtype',
+            'unitpenalty',
+        );
+    }
+
+    protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {
+        $attributes = array(
+            'multiplier',
+            'unit',
+        );
+
+        $unitsa = $questiona->options->units;
+        $unitsb = $questionb->options->units;
+        return comparer::object_arrays_are_duplicate($unitsa, $unitsb, $attributes);
     }
 }
