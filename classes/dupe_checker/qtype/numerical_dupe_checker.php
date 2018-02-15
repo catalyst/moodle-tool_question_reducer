@@ -48,4 +48,12 @@ class numerical_dupe_checker extends qtype_dupe_checker {
         $unitsb = $questionb->options->units;
         return comparer::object_arrays_are_duplicate($unitsa, $unitsb, $attributes);
     }
+
+    public static function questions_have_answers() {
+        return true;
+    }
+
+    public static function questions_have_hints() {
+        return true;
+    }
 }

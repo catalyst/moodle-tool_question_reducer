@@ -43,4 +43,12 @@ class multichoice_dupe_checker extends qtype_dupe_checker {
             'shownumcorrect',
         );
     }
+
+    public static function questions_have_answers() {
+        return true;
+    }
+
+    public static function questions_have_hints() {
+        return true;
+    }
 }

@@ -64,7 +64,14 @@ class question_dupe_checker {
             }
         }
 
-        // TODO: Need to check 'hints'
+        if ($questiontypedupechecker::questions_have_hints()) {
+            $hintsa = $questiona->options->hints;
+            $hintsb = $questionb->options->hints;
+            if (!question_answer_dupe_checker::question_hints_are_duplicate($hintsa, $hintsb)) {
+                return false;
+            }
+        }
+
         if (!$questiontypedupechecker::questions_are_duplicate($questiona, $questionb)) {
             return false;
         }

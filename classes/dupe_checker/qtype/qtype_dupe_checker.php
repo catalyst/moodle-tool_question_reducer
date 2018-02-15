@@ -55,6 +55,11 @@ abstract class qtype_dupe_checker {
 
     // Override me if required.
     public static function questions_have_answers() {
-        return true;
+        return false;
+    }
+
+    // Override me if required.
+    public static function questions_have_hints() {
+        return false;
     }
 }

@@ -51,4 +51,7 @@ class truefalse_dupe_checker extends qtype_dupe_checker {
         return true;
     }
 
+    public static function questions_have_answers() {
+        return true;
+    }
 }
