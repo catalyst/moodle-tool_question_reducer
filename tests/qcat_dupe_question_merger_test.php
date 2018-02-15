@@ -18,16 +18,25 @@ namespace tool_question_reducer\tests;
 
 defined('MOODLE_INTERNAL') || die();
 
+use tool_question_reducer\qcat_dupe_question_merger;
+
 class qcat_dupe_question_merger_test extends \advanced_testcase {
 
     protected function setUp() {
+        $this->resetAfterTest();
     }
 
     public function test_merges_duplicate_questions_within_qcat() {
+        global $DB;
+        $generator = $this->getDataGenerator()->get_plugin_generator('core_question');
+        $cat = $generator->create_question_category();
+        $qa = $generator->create_question('shortanswer', null, array('category' => $cat->id));
+        $qb = $generator->create_question('shortanswer', null, array('category' => $cat->id));
 
-        // For now we just create two duplicate short answer questions here.
-        // In future we want to rely on some dupe question generators for each supported question type.
-        $this->assertTrue(true);
+        qcat_dupe_question_merger::merge_duplicates($cat);
+
+        $questioncount = $DB->count_records('question', array('category' => $cat->id));
+        $this->assertEquals(1, $questioncount);
     }
 }
 
