@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tool_question_reducer\tests;
-use tool_question_reducer\merger\qcat_dupe_question_merger;
+use tool_question_reducer\dupe_merger\qcat_dupe_question_merger;
 use tool_question_reducer\dupe_checker\question_dupe_checker;
 
 class qcat_dupe_question_merger_test extends \advanced_testcase {
@@ -54,7 +54,7 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
             $this->create_duplicate_questions($qtype, $cat->id);
             qcat_dupe_question_merger::merge_duplicates($cat);
 
-            $questioncount = $DB->count_records('question', array('category' => $cat->id));
+            $questioncount = $DB->count_records('question', array('category' => $cat->id, 'parent' => 0));
             $this->assertEquals(1, $questioncount, "Failed for {$qtype}");
         }
     }
