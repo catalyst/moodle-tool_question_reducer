@@ -32,7 +32,7 @@ class question_dupe_checker {
 
     public static function get_supported_question_types() {
         global $CFG;
-        $path = $CFG->dirroot . '/admin/tool/question_reducer/classes/qtype_dupe_checkers/*_dupe_checker.php';
+        $path = $CFG->dirroot . '/admin/tool/question_reducer/classes/dupe_checker/qtype/*_dupe_checker.php';
         $qtypefilenames = glob($path);
 
         $supportedqtypes = array();
@@ -65,9 +65,9 @@ class question_dupe_checker {
         }
 
         if ($questiontypedupechecker::questions_have_hints()) {
-            $hintsa = $questiona->options->hints;
-            $hintsb = $questionb->options->hints;
-            if (!question_answer_dupe_checker::question_hints_are_duplicate($hintsa, $hintsb)) {
+            $hintsa = $questiona->hints;
+            $hintsb = $questionb->hints;
+            if (!question_hint_dupe_checker::question_hints_are_duplicate($hintsa, $hintsb)) {
                 return false;
             }
         }

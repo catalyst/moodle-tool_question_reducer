@@ -31,6 +31,20 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
         $qb = $this->questiongenerator->create_question($qtype, null, array('category' => $qcatid));
     }
 
+    public function test_get_supported_question_types() {
+        $expectedqtypes = array(
+            'multianswer',
+            'multichoice',
+            'numerical',
+            'shortanswer',
+            'truefalse',
+        );
+
+        $supportedqtypes = question_dupe_checker::get_supported_question_types();
+
+        $this->assertEquals($expectedqtypes, $supportedqtypes);
+    }
+
     public function test_merges_duplicate_questions_within_qcat() {
         global $DB;
 
@@ -38,7 +52,6 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
         foreach ($supportedquestiontypes as $qtype) {
             $cat = $this->questiongenerator->create_question_category();
             $this->create_duplicate_questions($qtype, $cat->id);
-
             qcat_dupe_question_merger::merge_duplicates($cat);
 
             $questioncount = $DB->count_records('question', array('category' => $cat->id));
