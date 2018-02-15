@@ -15,11 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace tool_question_reducer\tests;
-
-defined('MOODLE_INTERNAL') || die();
-
-use tool_question_reducer\qcat_dupe_question_merger;
-use tool_question_reducer\question_dupe_checker;
+use tool_question_reducer\merger\qcat_dupe_question_merger;
+use tool_question_reducer\dupe_checker\question_dupe_checker;
 
 class qcat_dupe_question_merger_test extends \advanced_testcase {
 

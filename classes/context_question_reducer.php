@@ -26,8 +26,7 @@
  */
 
 namespace tool_question_reducer;
-
-defined('MOODLE_INTERNAL') || die();
+use tool_question_reducer\merger\qcat_dupe_question_merger;
 
 class context_question_reducer {
 

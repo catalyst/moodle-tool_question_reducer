@@ -25,9 +25,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\helpers;
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_question_reducer\helper;
 
 class comparer {
     public static function object_arrays_are_duplicate($arraya, $arrayb, $comparisonattributes) {

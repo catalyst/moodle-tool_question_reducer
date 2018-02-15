@@ -25,9 +25,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_question_reducer\dupe_checker\qtype;
 
 class multichoice_dupe_checker extends qtype_dupe_checker {
     protected static function get_qtype_option_fields() {

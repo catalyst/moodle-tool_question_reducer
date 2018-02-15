@@ -23,10 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
-use tool_question_reducer\helpers\comparer;
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_question_reducer\dupe_checker\qtype;
+use tool_question_reducer\helper\comparer;
 
 abstract class qtype_dupe_checker {
     public static function questions_are_duplicate($questiona, $questionb) {

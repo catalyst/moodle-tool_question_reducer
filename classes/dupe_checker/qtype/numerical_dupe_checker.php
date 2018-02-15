@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * shortanswer_dupe_checker class.
+ * numerical_dupe_checker class.
  *
- * Will check if shortanswer questions are duplicate
+ * Will check if numerical questions are duplicate
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -25,14 +25,27 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
+namespace tool_question_reducer\dupe_checker\qtype;
+use tool_question_reducer\helper\comparer;
 
-defined('MOODLE_INTERNAL') || die();
-
-class shortanswer_dupe_checker extends qtype_dupe_checker {
+class numerical_dupe_checker extends qtype_dupe_checker {
     protected static function get_qtype_option_fields() {
         return array(
-            'usecase',
+            'showunits',
+            'unitsleft',
+            'unitgradingtype',
+            'unitpenalty',
         );
+    }
+
+    protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {
+        $attributes = array(
+            'multiplier',
+            'unit',
+        );
+
+        $unitsa = $questiona->options->units;
+        $unitsb = $questionb->options->units;
+        return comparer::object_arrays_are_duplicate($unitsa, $unitsb, $attributes);
     }
 }

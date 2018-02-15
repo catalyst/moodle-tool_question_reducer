@@ -25,11 +25,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer\qtype_dupe_checkers;
-
+namespace tool_question_reducer\dupe_checker\qtype;
 use tool_question_reducer\question_answer_dupe_checker;
-
-defined('MOODLE_INTERNAL') || die();
 
 class truefalse_dupe_checker extends qtype_dupe_checker {
 

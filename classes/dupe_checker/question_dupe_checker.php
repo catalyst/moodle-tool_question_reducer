@@ -25,10 +25,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer;
-use tool_question_reducer\helpers\comparer;
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_question_reducer\dupe_checker;
+use tool_question_reducer\helper\comparer;
 
 class question_dupe_checker {
 
@@ -56,7 +54,7 @@ class question_dupe_checker {
             return false;
         }
 
-        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
+        $questiontypedupechecker = "\\tool_question_reducer\\dupe_checker\\qtype\\{$qtype}_dupe_checker";
 
         if ($questiontypedupechecker::questions_have_answers()) {
             $answersa = $questiona->options->answers;

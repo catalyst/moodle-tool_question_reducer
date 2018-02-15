@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * question_answer_dupe_checker class.
+ * shortanswer_dupe_checker class.
  *
- * Will check if question answers are duplicate
+ * Will check if shortanswer questions are duplicate
  *
  * @package   tool_question_reducer
  * @author    Kenneth Hendricks <kennethhendricks@catalyst-au.net>
@@ -25,27 +25,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_question_reducer;
+namespace tool_question_reducer\dupe_checker\qtype;
 
-defined('MOODLE_INTERNAL') || die();
-
-use tool_question_reducer\helpers\comparer;
-
-class question_answer_dupe_checker {
-
-    private static $comparisonattributes = array(
-        'answer',
-        'answerformat',
-        'fraction',
-        'feedback',
-        'feedbackformat'
-    );
-
-    public static function answers_are_duplicate($answera, $answerb) {
-        return comparer::objects_are_duplicate($answera, $answerb, self::$comparisonattributes);
-    }
-
-    public static function question_answers_are_duplicate($answersa, $answersb) {
-        return comparer::object_arrays_are_duplicate($answersa, $answersb, self::$comparisonattributes);
+class shortanswer_dupe_checker extends qtype_dupe_checker {
+    protected static function get_qtype_option_fields() {
+        return array(
+            'usecase',
+        );
     }
 }
