@@ -60,6 +60,7 @@ class qcat_dupe_question_merger {
         $sql = "SELECT * from {question} q
                 WHERE q.category = :qcatid
                     AND q.qtype = :qtype
+                    AND q.parent = 0
                     AND q.name in ( SELECT q.name
                                     FROM {question} q
                                     INNER JOIN {question_categories} qc on qc.id = q.category
