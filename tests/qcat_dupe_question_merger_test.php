@@ -25,24 +25,27 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
 
     protected function setUp() {
         $this->resetAfterTest();
+        $this->questiongenerator = $this->getDataGenerator()->get_plugin_generator('core_question');
+    }
+
+    public function create_duplicate_questions($qtype, $qcatid) {
+        global $DB;
+        $qa = $this->questiongenerator->create_question($qtype, null, array('category' => $qcatid));
+        $qb = $this->questiongenerator->create_question($qtype, null, array('category' => $qcatid));
     }
 
     public function test_merges_duplicate_questions_within_qcat() {
         global $DB;
-        $generator = $this->getDataGenerator()->get_plugin_generator('core_question');
 
         $supportedquestiontypes = question_dupe_checker::get_supported_question_types();
-
         foreach ($supportedquestiontypes as $qtype) {
-            $cat = $generator->create_question_category();
-            $qa = $generator->create_question($qtype, null, array('category' => $cat->id));
-            $qb = $generator->create_question($qtype, null, array('category' => $cat->id));
-            $qc = $generator->create_question($qtype, null, array('category' => $cat->id));
+            $cat = $this->questiongenerator->create_question_category();
+            $this->create_duplicate_questions($qtype, $cat->id);
 
             qcat_dupe_question_merger::merge_duplicates($cat);
 
             $questioncount = $DB->count_records('question', array('category' => $cat->id));
-            $this->assertEquals(1, $questioncount);
+            $this->assertEquals(1, $questioncount, "Failed for {$qtype}");
         }
     }
 }
