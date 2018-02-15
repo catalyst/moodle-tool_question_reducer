@@ -31,6 +31,25 @@ defined('MOODLE_INTERNAL') || die();
 
 class question_dupe_checker {
 
+    public static function get_supported_question_types() {
+        global $CFG;
+        $path = $CFG->dirroot . '/admin/tool/question_reducer/classes/qtype_dupe_checkers/*_dupe_checker.php';
+        $qtypefilenames = glob($path);
+
+        $supportedqtypes = array();
+        foreach ($qtypefilenames as $filename) {
+            $supportedqtype = basename(str_replace('_dupe_checker.php', '', $filename));
+
+            // Ignore the interface.
+            if ($supportedqtype === 'qtype') {
+                continue;
+            }
+            $supportedqtypes[] = $supportedqtype;
+        }
+
+        return $supportedqtypes;
+    }
+
     public static function questions_are_duplicate($questiona, $questionb, $qtype) {
         $basecomparisonattributes = array(
             'questiontext',

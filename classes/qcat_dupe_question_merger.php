@@ -33,12 +33,9 @@ require_once($CFG->libdir.'/questionlib.php');
 
 class qcat_dupe_question_merger {
 
-    public static $supportedquestiontypes = array(
-        'shortanswer'
-    );
-
     public static function merge_duplicates($qcat) {
-        foreach (self::$supportedquestiontypes as $qtype) {
+        $supportedquestiontypes = question_dupe_checker::get_supported_question_types();
+        foreach ($supportedquestiontypes as $qtype) {
             self::merge_qtype_duplicates($qcat, $qtype);
         }
     }
