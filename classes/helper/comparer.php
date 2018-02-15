@@ -32,7 +32,7 @@ class comparer {
         $arraya = array_values($arraya);
         $arrayb = array_values($arrayb);
 
-        if (count(array_keys($arraya)) !== count(array_keys($arrayb))) {
+        if (count($arraya) !== count($arrayb)) {
             return false;
         }
 
