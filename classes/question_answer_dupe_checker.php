@@ -29,22 +29,23 @@ namespace tool_question_reducer;
 
 defined('MOODLE_INTERNAL') || die();
 
+use tool_question_reducer\helpers\comparer;
+
 class question_answer_dupe_checker {
+
+    private static $comparisonattributes = array(
+        'answer',
+        'answerformat',
+        'fraction',
+        'feedback',
+        'feedbackformat'
+    );
+
     public static function answers_are_duplicate($answera, $answerb) {
-        $comparisonattributes = array(
-            'answer',
-            'answerformat',
-            'fraction',
-            'feedback',
-            'feedbackformat'
-        );
+        return comparer::objects_are_duplicate($answera, $answerb, self::$comparisonattributes);
+    }
 
-        foreach ($comparisonattributes as $attribute) {
-            if ($answera->$attribute !== $answerb->$attribute) {
-                return false;
-            }
-        }
-
-        return true;
+    public static function question_answers_are_duplicate($answersa, $answersb) {
+        return comparer::object_arrays_are_duplicate($answersa, $answersb, self::$comparisonattributes);
     }
 }

@@ -26,6 +26,7 @@
  */
 
 namespace tool_question_reducer;
+use tool_question_reducer\helpers\comparer;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -55,7 +56,7 @@ class question_dupe_checker {
             return false;
         }
 
-        if (!self::question_answers_are_duplicate($questiona, $questionb)) {
+        if (!question_answer_dupe_checker::question_answers_are_duplicate($questiona->options->answers, $questionb->options->answers)) {
             return false;
         }
 
@@ -80,27 +81,6 @@ class question_dupe_checker {
             'length',
             'hidden'
         );
-
-        foreach ($basecomparisonattributes as $attribute) {
-            if ($questiona->$attribute !== $questionb->$attribute) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static function question_answers_are_duplicate($questiona, $questionb) {
-        // Need to reorder array keys because they are id indexed.
-        $answersa = array_values($questiona->options->answers);
-        $answersb = array_values($questionb->options->answers);
-
-        // TODO: Do this better, for now we assume they have the same order.
-        foreach ($answersa as $key => $answer) {
-            if (!question_answer_dupe_checker::answers_are_duplicate($answer, $answersb[$key])) {
-                return false;
-            }
-        }
-        return true;
+        return comparer::objects_are_duplicate($questiona, $questionb, $basecomparisonattributes);
     }
 }
