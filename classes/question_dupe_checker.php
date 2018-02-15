@@ -51,6 +51,25 @@ class question_dupe_checker {
     }
 
     public static function questions_are_duplicate($questiona, $questionb, $qtype) {
+        if (!self::base_questions_are_duplicate($questiona, $questionb)) {
+            return false;
+        }
+
+        if (!self::question_answers_are_duplicate($questiona, $questionb)) {
+            return false;
+        }
+
+        // TODO: Need to check 'hints'
+
+        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
+        if (!$questiontypedupechecker::questions_are_duplicate($questiona, $questionb)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function base_questions_are_duplicate($questiona, $questionb) {
         $basecomparisonattributes = array(
             'questiontext',
             'questiontextformat',
@@ -68,13 +87,39 @@ class question_dupe_checker {
             }
         }
 
-        // TODO: Need to check 'hints'
+        return true;
+    }
 
-        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
-        if (!$questiontypedupechecker::questions_are_duplicate($questiona, $questionb)) {
-            return false;
+    private static function question_answers_are_duplicate($questiona, $questionb) {
+        // Need to reorder array keys because they are id indexed.
+        $answersa = array_values($questiona->options->answers);
+        $answersb = array_values($questionb->options->answers);
+
+        // TODO: Do this better, for now we assume they have the same order.
+        foreach ($answersa as $key => $answer) {
+            if (!self::answers_are_duplicate($answer, $answersb[$key])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static function answers_are_duplicate($answera, $answerb) {
+        $comparisonattributes = array(
+            'answer',
+            'answerformat',
+            'fraction',
+            'feedback',
+            'feedbackformat'
+        );
+
+        foreach ($comparisonattributes as $attribute) {
+            if ($answera->$attribute !== $answerb->$attribute) {
+                return false;
+            }
         }
 
         return true;
     }
+
 }

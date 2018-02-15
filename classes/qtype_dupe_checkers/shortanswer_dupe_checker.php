@@ -36,35 +36,6 @@ class shortanswer_dupe_checker implements qtype_dupe_checker {
             return false;
         }
 
-        // Need to reorder array keys because they are id indexed.
-        $answersa = array_values($questiona->options->answers);
-        $answersb = array_values($questionb->options->answers);
-
-        // TODO: Do this better, for now we assume they have the same order.
-        foreach ($answersa as $key => $answer) {
-            if (!self::answers_are_duplicate($answer, $answersb[$key])) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static function answers_are_duplicate($answera, $answerb) {
-        $comparisonattributes = array(
-            'answer',
-            'answerformat',
-            'fraction',
-            'feedback',
-            'feedbackformat'
-        );
-
-        foreach ($comparisonattributes as $attribute) {
-            if ($answera->$attribute !== $answerb->$attribute) {
-                return false;
-            }
-        }
-
         return true;
     }
 
