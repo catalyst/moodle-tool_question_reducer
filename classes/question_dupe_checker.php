@@ -97,29 +97,10 @@ class question_dupe_checker {
 
         // TODO: Do this better, for now we assume they have the same order.
         foreach ($answersa as $key => $answer) {
-            if (!self::answers_are_duplicate($answer, $answersb[$key])) {
+            if (!question_answer_dupe_checker::answers_are_duplicate($answer, $answersb[$key])) {
                 return false;
             }
         }
         return true;
     }
-
-    private static function answers_are_duplicate($answera, $answerb) {
-        $comparisonattributes = array(
-            'answer',
-            'answerformat',
-            'fraction',
-            'feedback',
-            'feedbackformat'
-        );
-
-        foreach ($comparisonattributes as $attribute) {
-            if ($answera->$attribute !== $answerb->$attribute) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 }
