@@ -56,13 +56,17 @@ class question_dupe_checker {
             return false;
         }
 
-        if (!question_answer_dupe_checker::question_answers_are_duplicate($questiona->options->answers, $questionb->options->answers)) {
-            return false;
+        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
+
+        if ($questiontypedupechecker::questions_have_answers()) {
+            $answersa = $questiona->options->answers;
+            $answersb = $questionb->options->answers;
+            if (!question_answer_dupe_checker::question_answers_are_duplicate($answersa, $answersb)) {
+                return false;
+            }
         }
 
         // TODO: Need to check 'hints'
-
-        $questiontypedupechecker = "\\tool_question_reducer\\qtype_dupe_checkers\\{$qtype}_dupe_checker";
         if (!$questiontypedupechecker::questions_are_duplicate($questiona, $questionb)) {
             return false;
         }

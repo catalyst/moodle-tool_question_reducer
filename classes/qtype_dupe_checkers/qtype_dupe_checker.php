@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class qtype_dupe_checker {
     public static function questions_are_duplicate($questiona, $questionb) {
-        if (!static::question_options_are_duplicate($questiona->options, $questionb->options)) {
+        if (!empty(static::get_qtype_option_fields()) && !static::question_options_are_duplicate($questiona->options, $questionb->options)) {
              return false;
         }
 
@@ -53,5 +53,10 @@ abstract class qtype_dupe_checker {
     // Override me if required.
     protected static function get_qtype_option_fields() {
         return array();
+    }
+
+    // Override me if required.
+    public static function questions_have_answers() {
+        return true;
     }
 }
