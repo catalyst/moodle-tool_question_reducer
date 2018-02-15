@@ -2,9 +2,9 @@
 
 A admin tool whos goal is to reduce the number of questions within a site through removing redundant questions. There a few different ways it attempts to acheive this:
 
-* Remove duplicate questions within question categories
-* Merges similar question category with a context together.
-* Removes unlinked questions
+* Remove duplicate questions within question categories.
+* Merge similar question categories with a context together.
+* Remove orphaned questions.
 
 ## Tests
 
