@@ -23,6 +23,8 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
     protected function setUp() {
         $this->resetAfterTest();
         $this->questiongenerator = $this->getDataGenerator()->get_plugin_generator('core_question');
+        $this->quizgenerator = $this->getDataGenerator()->get_plugin_generator('mod_quiz');
+
     }
 
     public function create_duplicate_questions($qtype, $qcatid) {
@@ -51,12 +53,29 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
         $supportedquestiontypes = question_dupe_checker::get_supported_question_types();
         foreach ($supportedquestiontypes as $qtype) {
             $cat = $this->questiongenerator->create_question_category();
-            $this->create_duplicate_questions($qtype, $cat->id);
+            $qa = $this->questiongenerator->create_question($qtype, null, array('category' => $cat->id));
+            $qb = $this->questiongenerator->create_question($qtype, null, array('category' => $cat->id));
+
             qcat_dupe_question_merger::merge_duplicates($cat);
 
             $questioncount = $DB->count_records('question', array('category' => $cat->id, 'parent' => 0));
             $this->assertEquals(1, $questioncount, "Failed for {$qtype}");
         }
+    }
+
+    public function test_questions_that_share_quiz_are_not_merged() {
+        global $SITE, $DB;
+        $cat = $this->questiongenerator->create_question_category();
+        $qa = $this->questiongenerator->create_question('shortanswer', null, array('category' => $cat->id));
+        $qb = $this->questiongenerator->create_question('shortanswer', null, array('category' => $cat->id));
+        $quiz = $this->quizgenerator->create_instance(array('course' => $SITE->id));
+        quiz_add_quiz_question($qa->id, $quiz);
+        quiz_add_quiz_question($qb->id, $quiz);
+
+        qcat_dupe_question_merger::merge_duplicates($cat);
+
+        $questioncount = $DB->count_records('question', array('category' => $cat->id));
+        $this->assertEquals(2, $questioncount);
     }
 }
 
