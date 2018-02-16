@@ -35,10 +35,20 @@ class qcat_dupe_question_merger {
     public static function merge_duplicates($qcat) {
         $supportedquestiontypes = question_dupe_checker::get_supported_question_types();
         foreach ($supportedquestiontypes as $qtype) {
-            self::merge_qtype_duplicates($qcat, $qtype);
+            $success = self::merge_qtype_duplicates($qcat, $qtype);
+            while ($success) {
+                $success = self::merge_qtype_duplicates($qcat, $qtype);
+            }
         }
     }
 
+    /**
+     * Merges duplicates for the qtype within a qcat.
+     *
+     * @param \stdClass $qcat
+     * @param string $qtype
+     * @return bool success
+     */
     private static function merge_qtype_duplicates($qcat, $qtype) {
         // Get all questions with same name
         $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
@@ -56,7 +66,10 @@ class qcat_dupe_question_merger {
         // subgroup_based_on_question isnt optimal so this will keep going to get around that.
         if (!empty($identicalquestiongroups)) {
             self::merge_qtype_duplicates($qcat, $qtype);
+            return true;
         }
+
+        return false;
     }
 
     private static function get_question_groups_with_same_name($qcat, $qtype) {
