@@ -52,6 +52,10 @@ class qcat_dupe_question_merger {
         foreach ($identicalquestiongroups as $group) {
             question_merger::merge_questions($group, $qtype);
         }
+
+        if (!empty($identicalquestiongroups)) {
+            merge_qtype_duplicates($qcat, $qtype);
+        }
     }
 
     private static function get_question_groups_with_same_name($qcat, $qtype) {
