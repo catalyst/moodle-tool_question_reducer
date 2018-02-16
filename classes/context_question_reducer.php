@@ -26,7 +26,7 @@
  */
 
 namespace tool_question_reducer;
-use tool_question_reducer\merger\qcat_dupe_question_merger;
+use tool_question_reducer\dupe_merger\qcat_dupe_question_merger;
 
 class context_question_reducer {
 
