@@ -129,19 +129,21 @@ class qcat_dupe_question_merger {
     private static function question_shares_quiz_with_any_questions($question, $questions) {
         global $DB;
 
-        // INTERSECT not supported by mysql.
-        $sql = "SELECT distinct(qs.quizid)
-                FROM mdl_quiz_slots qs
-                WHERE slot in (:questionsids)
-                INTERSECT
-                SELECT distinct(qs.quizid)
-                FROM mdl_quiz_slots qs
-                WHERE slot = :questionid";
+        list($insql, $params) = $DB->get_in_or_equal(array_keys($questions), SQL_PARAMS_NAMED);
+        $params['questionid'] = $question->id;
 
-        $params = array(
-            'questionsids' => implode(',', array_keys($questions)),
-            'questionid' => $question->id,
-        );
+        // INTERSECT not supported by mysql.
+        $sql = "(
+                    SELECT distinct(qsa.quizid)
+                    FROM {quiz_slots} qsa
+                    WHERE qsa.questionid {$insql}
+                )
+                INTERSECT
+                (
+                    SELECT distinct(qsb.quizid)
+                    FROM {quiz_slots} qsb
+                    WHERE qsb.questionid = :questionid
+                )";
 
         return $DB->record_exists_sql($sql, $params);
     }
