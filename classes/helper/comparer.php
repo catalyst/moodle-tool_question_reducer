@@ -29,20 +29,23 @@ namespace tool_question_reducer\helper;
 
 class comparer {
     public static function object_arrays_are_duplicate($arraya, $arrayb, $comparisonattributes) {
-        $arraya = array_values($arraya);
-        $arrayb = array_values($arrayb);
-
         if (count($arraya) !== count($arrayb)) {
             return false;
         }
 
-        // TODO: Do this better, for now we assume they have the same order.
-        foreach ($arraya as $key => $object) {
-            if (!self::objects_are_duplicate($object, $arrayb[$key], $comparisonattributes)) {
-                return false;
+        $totalobjects = count($arraya);
+        $sameobjects = 0;
+
+        foreach ($arraya as $objecta) {
+            foreach ($arrayb as $objectb) {
+                if (self::objects_are_duplicate($objecta, $objectb, $comparisonattributes)) {
+                    $sameobjects++;
+                    break;
+                }
             }
         }
-        return true;
+
+        return ($totalobjects === $sameobjects);
     }
 
     public static function objects_are_duplicate($objecta, $objectb, $comparisonattributes) {
