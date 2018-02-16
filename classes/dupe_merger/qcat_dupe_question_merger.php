@@ -53,8 +53,9 @@ class qcat_dupe_question_merger {
             question_merger::merge_questions($group, $qtype);
         }
 
+        // subgroup_based_on_question isnt optimal so this will keep going to get around that.
         if (!empty($identicalquestiongroups)) {
-            merge_qtype_duplicates($qcat, $qtype);
+            self::merge_qtype_duplicates($qcat, $qtype);
         }
     }
 
