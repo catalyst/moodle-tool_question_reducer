@@ -50,26 +50,29 @@ class qcat_dupe_question_merger {
      * @return bool success
      */
     private static function merge_qtype_duplicates($qcat, $qtype) {
-        // Get all questions with same name
-        $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
+        $duplicatesfound = false;
 
-        // Group now based on all question data.
-        $identicalquestiongroups = array();
-        foreach ($samenamegroups as $group) {
-            $identicalquestiongroups = $identicalquestiongroups + self::subgroup_based_on_question($group, $qtype);
-        }
+        // Subgroup_based_on_question isnt optimal so this will keep going to get around that.
+        do {
+            // Get all questions with same name
+            $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
 
-        foreach ($identicalquestiongroups as $group) {
-            question_merger::merge_questions($group, $qtype);
-        }
+            // Group now based on all question data.
+            $identicalquestiongroups = array();
+            foreach ($samenamegroups as $group) {
+                $identicalquestiongroups = $identicalquestiongroups + self::subgroup_based_on_question($group, $qtype);
+            }
 
-        // subgroup_based_on_question isnt optimal so this will keep going to get around that.
-        if (!empty($identicalquestiongroups)) {
-            self::merge_qtype_duplicates($qcat, $qtype);
-            return true;
-        }
+            foreach ($identicalquestiongroups as $group) {
+                question_merger::merge_questions($group, $qtype);
+            }
 
-        return false;
+            if (!empty($identicalquestiongroups)) {
+                $duplicatesfound = true;
+            }
+        } while (!empty($identicalquestiongroups));
+
+        return $duplicatesfound;
     }
 
     private static function get_question_groups_with_same_name($qcat, $qtype) {
