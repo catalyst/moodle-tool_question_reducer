@@ -26,6 +26,7 @@
  */
 
 namespace tool_question_reducer\dupe_checker\qtype;
+use tool_question_reducer\helper\comparer;
 
 class calculated_dupe_checker extends qtype_dupe_checker {
     protected static function get_qtype_option_fields() {

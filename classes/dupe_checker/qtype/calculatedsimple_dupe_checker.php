@@ -29,4 +29,18 @@ namespace tool_question_reducer\dupe_checker\qtype;
 
 class calculatedsimple_dupe_checker extends calculated_dupe_checker {
     // This shares the same matching as qtype calculated.
+    protected static function get_qtype_option_fields() {
+        return array(
+            'synchronize',
+            'single',
+            'shuffleanswers',
+            'correctfeedback',
+            'partiallycorrectfeedback',
+            'incorrectfeedback',
+            'answernumbering',
+            'correctfeedbackformat',
+            'partiallycorrectfeedbackformat',
+            'incorrectfeedbackformat'
+        );
+    }
 }
