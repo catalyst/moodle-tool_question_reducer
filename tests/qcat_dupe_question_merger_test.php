@@ -35,6 +35,10 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
 
     public function test_get_supported_question_types() {
         $expectedqtypes = array(
+            'calculated',
+            'calculatedsimple',
+            'essay',
+            'match',
             'multianswer',
             'multichoice',
             'numerical',
@@ -53,8 +57,13 @@ class qcat_dupe_question_merger_test extends \advanced_testcase {
         $supportedquestiontypes = question_dupe_checker::get_supported_question_types();
         foreach ($supportedquestiontypes as $qtype) {
             $cat = $this->questiongenerator->create_question_category();
-            $qa = $this->questiongenerator->create_question($qtype, null, array('category' => $cat->id));
-            $qb = $this->questiongenerator->create_question($qtype, null, array('category' => $cat->id));
+            // This is a bit hacky, but calculatedsimple doesn't seem to work with the default $which.
+            $which = null;
+            if ($qtype == 'calculatedsimple') {
+                $which = 'sumwithvariants';
+            }
+            $qa = $this->questiongenerator->create_question($qtype, $which, array('category' => $cat->id));
+            $qb = $this->questiongenerator->create_question($qtype, $which, array('category' => $cat->id));
 
             qcat_dupe_question_merger::merge_duplicates($cat);
 
