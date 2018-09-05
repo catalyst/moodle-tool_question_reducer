@@ -25,3 +25,4 @@
  */
 
 $string['pluginname'] = 'Question reducer';
+$string['privacy:metadata'] = 'Question reducer tool does not store any personal data.';
