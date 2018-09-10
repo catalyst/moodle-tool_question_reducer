@@ -27,7 +27,7 @@ namespace tool_question_reducer\privacy;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The mod_modname module does not store any data.
+ * The tool_question_reducer does not store any data.
  *
  */
 class provider implements \core_privacy\local\metadata\null_provider {
