@@ -27,6 +27,8 @@
 
 namespace tool_question_reducer\helper;
 
+defined('MOODLE_INTERNAL') || die();
+
 class comparer {
     public static function object_arrays_are_duplicate($arraya, $arrayb, $comparisonattributes) {
         if (count($arraya) !== count($arrayb)) {

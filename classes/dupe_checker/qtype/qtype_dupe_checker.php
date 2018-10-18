@@ -26,9 +26,12 @@
 namespace tool_question_reducer\dupe_checker\qtype;
 use tool_question_reducer\helper\comparer;
 
+defined('MOODLE_INTERNAL') || die();
+
 abstract class qtype_dupe_checker {
     public static function questions_are_duplicate($questiona, $questionb) {
-        if (!empty(static::get_qtype_option_fields()) && !static::question_options_are_duplicate($questiona->options, $questionb->options)) {
+        if (!empty(static::get_qtype_option_fields())
+            && !static::question_options_are_duplicate($questiona->options, $questionb->options)) {
              return false;
         }
 

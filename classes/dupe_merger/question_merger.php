@@ -27,6 +27,8 @@
 
 namespace tool_question_reducer\dupe_merger;
 
+defined('MOODLE_INTERNAL') || die();
+
 class question_merger {
 
     public static function merge_questions($questions, $qtype) {

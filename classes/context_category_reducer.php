@@ -31,6 +31,8 @@ use tool_question_reducer\dupe_merger\category_dupe_question_merger;
 use tool_question_reducer\dupe_merger\question_merger;
 use tool_question_reducer\dupe_checker\question_dupe_checker;
 
+defined('MOODLE_INTERNAL') || die();
+
 class context_category_reducer {
 
     public static function reduce_categories($contextid) {
@@ -109,13 +111,16 @@ class context_category_reducer {
 
                         $totalmatches = $totalmatches + $returndata->crosscatmatches;
                     }
+
+                    $totalcatbqcount = count($totalcatbquestions);
+
                     if ($totalmatches > 10) {
-                        echo ("There were $totalmatches out of " . count($totalcatbquestions) . " between $cata->name and $catb->name \n");
+                        echo ("There were $totalmatches out of " . $totalcatbqcount . " between $cata->name and $catb->name \n");
                     }
 
-                    if ($totalmatches > (count($totalcatbquestions) / 2)) {
+                    if ($totalmatches > ($totalcatbqcount / 2)) {
                         echo("\n");
-                        echo("There were $totalmatches out of " . count($totalcatbquestions) . " between $cata->name and $catb->name \n");
+                        echo("There were $totalmatches out of " . $totalcatbqcount . " between $cata->name and $catb->name \n");
                         echo ("Merging $catb->name questions into $cata->name \n");
                         $msg = self::merge_category_questions($totalmatchedbquestions, $totalcatbquestions, $cata);
                         if ($msg) {
@@ -155,6 +160,8 @@ class context_category_reducer {
     }
 
     private static function merge_category_questions($totalmatchedbquestions, $totalcatbquestions, $parentcat) {
+        $deletesuccess = true;
+
         foreach ($totalcatbquestions as $catbquestion) {
             $match = false;
             foreach ($totalmatchedbquestions as $matchedbquestion) {

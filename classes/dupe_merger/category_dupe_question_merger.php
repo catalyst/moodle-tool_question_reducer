@@ -27,6 +27,8 @@
 
 namespace tool_question_reducer\dupe_merger;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/questionlib.php');
 
 class category_dupe_question_merger {

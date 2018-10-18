@@ -27,6 +27,8 @@
 
 namespace tool_question_reducer\dupe_checker\qtype;
 
+defined('MOODLE_INTERNAL') || die();
+
 class calculatedsimple_dupe_checker extends calculated_dupe_checker {
     // This shares the same matching as qtype calculated.
     protected static function get_qtype_option_fields() {

@@ -28,6 +28,8 @@
 namespace tool_question_reducer\dupe_merger;
 use tool_question_reducer\dupe_checker\question_dupe_checker;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/questionlib.php');
 
 class qcat_dupe_question_merger {
@@ -54,7 +56,7 @@ class qcat_dupe_question_merger {
 
         // Subgroup_based_on_question isnt optimal so this will keep going to get around that.
         do {
-            // Get all questions with same name
+            // Get all questions with same name.
             $samenamegroups = self::get_question_groups_with_same_name($qcat, $qtype);
 
             // Group now based on all question data.
@@ -98,10 +100,10 @@ class qcat_dupe_question_merger {
 
         $questions = $DB->get_records_sql($sql, $params);
 
-        // Attach question type data
+        // Attach question type data.
         get_question_options($questions);
 
-        // Group by name
+        // Group by name.
         $groupedquestions = array();
         foreach ($questions as $question) {
             if (!isset($groupedquestions[$question->name])) {

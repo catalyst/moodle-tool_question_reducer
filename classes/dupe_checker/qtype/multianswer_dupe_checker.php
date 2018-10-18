@@ -29,10 +29,11 @@ namespace tool_question_reducer\dupe_checker\qtype;
 use tool_question_reducer\helper\comparer;
 use tool_question_reducer\dupe_checker\question_dupe_checker;
 
+defined('MOODLE_INTERNAL') || die();
+
 class multianswer_dupe_checker extends qtype_dupe_checker {
     protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {
-        // Compare questions
-
+        // Compare questions.
         // these questions are already indexed incrementally.
         $questionaquestions = $questiona->options->questions;
         $questionbquestions = $questionb->options->questions;
@@ -53,11 +54,6 @@ class multianswer_dupe_checker extends qtype_dupe_checker {
             }
         }
         return true;
-
-
-
-
-        return false;
     }
 
     public static function questions_have_hints() {

@@ -18,6 +18,8 @@ namespace tool_question_reducer\tests;
 use tool_question_reducer\dupe_merger\qcat_dupe_question_merger;
 use tool_question_reducer\dupe_checker\question_dupe_checker;
 
+defined('MOODLE_INTERNAL') || die();
+
 class qcat_dupe_question_merger_test extends \advanced_testcase {
 
     protected function setUp() {

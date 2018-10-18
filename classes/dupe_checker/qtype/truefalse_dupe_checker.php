@@ -28,6 +28,8 @@
 namespace tool_question_reducer\dupe_checker\qtype;
 use tool_question_reducer\dupe_checker\question_answer_dupe_checker;
 
+defined('MOODLE_INTERNAL') || die();
+
 class truefalse_dupe_checker extends qtype_dupe_checker {
 
     protected static function specific_qtype_details_are_duplicate($questiona, $questionb) {

@@ -28,17 +28,19 @@
 namespace tool_question_reducer;
 use tool_question_reducer\dupe_merger\qcat_dupe_question_merger;
 
+defined('MOODLE_INTERNAL') || die();
+
 class context_question_reducer {
 
     public static function reduce_questions($contextid) {
 
-        // Get all question categories in context
+        // Get all question categories in context.
         $qcats = self::get_all_question_categories($contextid);
 
         // Merge duplicate question categories with context
-        // \\tool_question_reducer\\dupe_qcat_merger something something 
+        // \\tool_question_reducer\\dupe_qcat_merger something something.
 
-        // Merge duplicate questions within question categories
+        // Merge duplicate questions within question categories.
         self::merge_duplicate_questions_within_question_categories($qcats);
     }
 

@@ -28,6 +28,8 @@
 namespace tool_question_reducer\dupe_checker;
 use tool_question_reducer\helper\comparer;
 
+defined('MOODLE_INTERNAL') || die();
+
 class question_hint_dupe_checker {
 
     private static $comparisonattributes = array(
