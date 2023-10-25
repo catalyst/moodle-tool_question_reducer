@@ -22,7 +22,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class qcat_dupe_question_merger_test extends \advanced_testcase {
 
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest();
         $this->questiongenerator = $this->getDataGenerator()->get_plugin_generator('core_question');
         $this->quizgenerator = $this->getDataGenerator()->get_plugin_generator('mod_quiz');
